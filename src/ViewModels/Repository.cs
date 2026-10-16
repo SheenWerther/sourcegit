@@ -79,8 +79,19 @@ namespace SourceGit.ViewModels
                     OnPropertyChanged(nameof(IsDashboardVisible));
                     OnPropertyChanged(nameof(IsWorkingCopyVisible));
                     OnPropertyChanged(nameof(IsStashesVisible));
+                    OnPropertyChanged(nameof(IsCodeEditorVisible));
                 }
             }
+        }
+
+        public CodeEditorPage CodeEditorPage
+        {
+            get => _codeEditorPage;
+        }
+
+        public bool IsCodeEditorVisible
+        {
+            get => SelectedViewIndex == 3;
         }
 
         public Histories Histories
@@ -453,6 +464,7 @@ namespace SourceGit.ViewModels
             _histories = new Histories(this);
             _workingCopy = new WorkingCopy(this) { CommitMessage = _uiStates.LastCommitMessage };
             _stashesPage = new StashesPage(this);
+            _codeEditorPage = new CodeEditorPage(this);
             _selectedViewIndex = Preferences.Instance.ShowLocalChangesByDefault ? 1 : 0;
             _lastFetchTime = DateTime.Now;
             _autoFetchTimer = new Timer(AutoFetchByTimer, null, 5000, 5000);
@@ -1950,6 +1962,7 @@ namespace SourceGit.ViewModels
         private Histories _histories = null;
         private WorkingCopy _workingCopy = null;
         private StashesPage _stashesPage = null;
+        private CodeEditorPage _codeEditorPage = null;
         private int _selectedViewIndex = 0;
 
         private int _localBranchesCount = 0;

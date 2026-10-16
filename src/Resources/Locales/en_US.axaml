@@ -149,6 +149,15 @@
   <x:String x:Key="Text.Clone.RemoteURL" xml:space="preserve">Repository URL:</x:String>
   <x:String x:Key="Text.Close" xml:space="preserve">CLOSE</x:String>
   <x:String x:Key="Text.CodeEditor" xml:space="preserve">Editor</x:String>
+  <x:String x:Key="Text.FileEditor" xml:space="preserve">Code Editor</x:String>
+  <x:String x:Key="Text.FileEditor.Binary" xml:space="preserve">This is a binary file. Please open it with an external editor.</x:String>
+  <x:String x:Key="Text.FileEditor.DiscardConfirm" xml:space="preserve">The current file has unsaved changes. Discard them?</x:String>
+  <x:String x:Key="Text.FileEditor.OverwriteConfirm" xml:space="preserve">The file was modified outside the editor. Overwrite it anyway?</x:String>
+  <x:String x:Key="Text.FileEditor.ReadFailed" xml:space="preserve">Failed to read this file.</x:String>
+  <x:String x:Key="Text.FileEditor.ReloadConfirm" xml:space="preserve">The file was modified outside the editor. Reload it? Unsaved changes will be lost.</x:String>
+  <x:String x:Key="Text.FileEditor.SelectFile" xml:space="preserve">Select a file to edit</x:String>
+  <x:String x:Key="Text.FileEditor.TooLarge" xml:space="preserve">This file is larger than 1 MB. Please open it with an external editor.</x:String>
+  <x:String x:Key="Text.FileEditor.UnsupportedEncoding" xml:space="preserve">Only UTF-8 and UTF-16 files are supported. Please open it with an external editor.</x:String>
   <x:String x:Key="Text.CommandPalette.Branches" xml:space="preserve">Branches</x:String>
   <x:String x:Key="Text.CommandPalette.BranchesAndTags" xml:space="preserve">Branches &amp; Tags</x:String>
   <x:String x:Key="Text.CommandPalette.RepositoryActions" xml:space="preserve">Repository Custom Actions</x:String>

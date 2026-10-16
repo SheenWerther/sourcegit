@@ -112,6 +112,17 @@
             </Border>
           </Grid>
         </ListBoxItem>
+
+        <ListBoxItem IsVisible="{Binding !IsBare}" ToolTip.Placement="Right">
+          <ToolTip.Tip>
+            <TextBlock>
+              <Run Text="{DynamicResource Text.FileEditor}" Foreground="{DynamicResource Brush.FG1}"/>
+              <Run Text=" "/>
+              <Run Text="{OnPlatform Ctrl+4, macOS=⌘+4}" FontSize="11" Foreground="{DynamicResource MenuFlyoutItemKeyboardAcceleratorTextForeground}"/>
+            </TextBlock>
+          </ToolTip.Tip>
+          <Path Classes="icon" Data="{StaticResource Icons.Edit}"/>
+        </ListBoxItem>
       </ListBox>
       
       <Button Grid.Row="2"
@@ -811,6 +822,11 @@
               <!-- Stashes Page -->
               <Border IsVisible="{Binding IsStashesVisible, Mode=OneWay}" PropertyChanged="OnRightPagePropertyChanged">
                 <v:StashesPage DataContext="{Binding StashesPage, Mode=OneWay}"/>
+              </Border>
+
+              <!-- Code Editor Page -->
+              <Border IsVisible="{Binding IsCodeEditorVisible, Mode=OneWay}">
+                <v:CodeEditorPage DataContext="{Binding CodeEditorPage, Mode=OneWay}"/>
               </Border>
 
               <!-- Auto-Fetch Notification -->
