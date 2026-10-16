@@ -104,7 +104,7 @@ namespace SourceGit.Models
         public string LastScope { get; set; } = string.Empty;
 
         public IRawTheme GetTheme(string scopeName) => _backend.GetTheme(scopeName);
-        public IRawTheme GetDefaultTheme() => _backend.GetDefaultTheme();
+        public IRawTheme GetDefaultTheme() => LoadTheme(defaultTheme);
         public ICollection<string> GetInjections(string scopeName) => _backend.GetInjections(scopeName);
         public IRawGrammar GetGrammar(string scopeName) => GrammarUtility.GetGrammar(scopeName, _backend);
         public string GetScope(string filename) => GrammarUtility.GetScope(filename, _backend);
@@ -114,7 +114,7 @@ namespace SourceGit.Models
             if (s_cachedTheme.TryGetValue(name, out var cached))
                 return cached;
 
-            var loaded = _backend.LoadTheme(name);
+            var loaded = (name == ThemeName.DarkPlus ? CursorDarkTheme.Load() : null) ?? _backend.LoadTheme(name);
             s_cachedTheme.Add(name, loaded);
             return loaded;
         }
