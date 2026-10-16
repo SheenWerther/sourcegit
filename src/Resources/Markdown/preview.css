@@ -10,8 +10,9 @@
 @font-face { font-family: 'DejaVu Sans Mono'; font-weight: bold; src: url('fonts/DejaVuSansMono-Bold.ttf'); }
 
 :root {
-  --editor-color: #4d4d4d;
-  --editor-color-80: #333;
+  /* 正文颜色比 MarkText 的 #4d4d4d 深一档，文字看起来更实；标题再深一点 */
+  --editor-color: #333;
+  --editor-color-80: #1f1f1f;
   --editor-color-50: #808080;
   --editor-color-30: #b3b3b3;
   --editor-color-10: #e6e6e6;
