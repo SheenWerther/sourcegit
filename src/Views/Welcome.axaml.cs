@@ -454,15 +454,20 @@ namespace SourceGit.Views
             _startDragTreeNode = false;
         }
 
+        private void OnTappedTreeNode(object sender, TappedEventArgs e)
+        {
+            if (sender is Grid { DataContext: ViewModels.RepositoryNode { IsRepository: false } node } && TreeRowTap.IsPlainTap(e))
+            {
+                ViewModels.Welcome.Instance.ToggleNodeIsExpanded(node);
+                e.Handled = true;
+            }
+        }
+
         private void OnDoubleTappedTreeNode(object sender, TappedEventArgs e)
         {
-            if (sender is Grid { DataContext: ViewModels.RepositoryNode node })
+            if (sender is Grid { DataContext: ViewModels.RepositoryNode { IsRepository: true } node })
             {
-                if (node.IsRepository)
-                    node.Open();
-                else
-                    ViewModels.Welcome.Instance.ToggleNodeIsExpanded(node);
-
+                node.Open();
                 e.Handled = true;
             }
         }

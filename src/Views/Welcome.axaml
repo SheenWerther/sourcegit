@@ -121,6 +121,7 @@
                   PointerPressed="OnPointerPressedTreeNode"
                   PointerMoved="OnPointerMovedOverTreeNode"
                   PointerReleased="OnPointerReleasedOnTreeNode"
+                  Tapped="OnTappedTreeNode"
                   DoubleTapped="OnDoubleTappedTreeNode"
                   DragDrop.AllowDrop="True"
                   DragDrop.DragOver="DragOverTreeNode"

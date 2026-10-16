@@ -34,7 +34,7 @@
         <Grid ColumnDefinitions="16,Auto,Auto,*"
               Margin="{Binding Depth, Converter={x:Static c:IntConverters.ToTreeMargin}}"
               Background="Transparent"
-              DoubleTapped="OnTreeNodeDoubleTapped"
+              Tapped="OnTreeNodeTapped"
               ContextRequested="OnTreeNodeContextRequested">
           <v:RevisionFileTreeNodeToggleButton Grid.Column="0"
                                               Classes="tree_expander"

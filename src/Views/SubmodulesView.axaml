@@ -102,6 +102,7 @@
           <DataTemplate DataType="vm:SubmoduleTreeNode">
             <Border Height="24"
                     Background="Transparent"
+                    Tapped="OnItemTapped"
                     DoubleTapped="OnItemDoubleTapped"
                     ContextRequested="OnItemContextRequested"
                     ToolTip.Tip="{Binding Module}"

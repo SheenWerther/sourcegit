@@ -153,15 +153,19 @@ namespace SourceGit.Views
             }
         }
 
+        private void OnItemTapped(object sender, TappedEventArgs e)
+        {
+            if (sender is Control { DataContext: ViewModels.SubmoduleTreeNode { IsFolder: true } node } && TreeRowTap.IsPlainTap(e))
+                ToggleNodeIsExpanded(node);
+        }
+
         private void OnItemDoubleTapped(object sender, TappedEventArgs e)
         {
             if (sender is Control control && DataContext is ViewModels.Repository repo)
             {
                 if (control.DataContext is ViewModels.SubmoduleTreeNode node)
                 {
-                    if (node.IsFolder)
-                        ToggleNodeIsExpanded(node);
-                    else if (node.Module.Status != Models.SubmoduleStatus.NotInited)
+                    if (!node.IsFolder && node.Module.Status != Models.SubmoduleStatus.NotInited)
                         repo.OpenSubmodule(node.Module.Path);
                 }
                 else if (control.DataContext is Models.Submodule m && m.Status != Models.SubmoduleStatus.NotInited)

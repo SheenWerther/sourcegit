@@ -637,22 +637,21 @@ namespace SourceGit.Views
             }
         }
 
+        private void OnTappedBranchNode(object sender, TappedEventArgs e)
+        {
+            if (sender is Grid { DataContext: ViewModels.BranchTreeNode node } && node.Backend is not Models.Branch && TreeRowTap.IsPlainTap(e))
+                ToggleNodeIsExpanded(node);
+        }
+
         private async void OnDoubleTappedBranchNode(object sender, TappedEventArgs _)
         {
-            if (sender is Grid { DataContext: ViewModels.BranchTreeNode node })
+            if (sender is Grid { DataContext: ViewModels.BranchTreeNode { Backend: Models.Branch branch } })
             {
-                if (node.Backend is Models.Branch branch)
-                {
-                    if (branch.IsCurrent)
-                        return;
+                if (branch.IsCurrent)
+                    return;
 
-                    if (DataContext is ViewModels.Repository { Settings: not null } repo)
-                        await repo.CheckoutBranchAsync(branch);
-                }
-                else
-                {
-                    ToggleNodeIsExpanded(node);
-                }
+                if (DataContext is ViewModels.Repository { Settings: not null } repo)
+                    await repo.CheckoutBranchAsync(branch);
             }
         }
 

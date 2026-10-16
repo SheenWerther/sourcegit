@@ -413,16 +413,10 @@ namespace SourceGit.Views
             e.Handled = true;
         }
 
-        private async void OnTreeNodeDoubleTapped(object sender, TappedEventArgs e)
+        private async void OnTreeNodeTapped(object sender, TappedEventArgs e)
         {
-            if (sender is Grid { DataContext: ViewModels.RevisionFileTreeNode { IsFolder: true } node })
-            {
-                var posX = e.GetPosition(this).X;
-                if (posX < node.Depth * 16 + 16)
-                    return;
-
+            if (sender is Grid { DataContext: ViewModels.RevisionFileTreeNode { IsFolder: true } node } && TreeRowTap.IsPlainTap(e))
                 await ToggleNodeIsExpandedAsync(node);
-            }
         }
 
         private async void OnRowsSelectionChanged(object sender, SelectionChangedEventArgs _)

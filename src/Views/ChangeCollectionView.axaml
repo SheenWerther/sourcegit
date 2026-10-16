@@ -41,6 +41,7 @@
                         Height="24"
                         Margin="{Binding Depth, Converter={x:Static c:IntConverters.ToTreeMargin}}"
                         Background="Transparent"
+                        Tapped="OnRowTapped"
                         DoubleTapped="OnRowDoubleTapped"
                         DataContextChanged="OnRowDataContextChanged">
               <Border Width="16">

@@ -33,6 +33,7 @@
             <Border Height="24"
                     Background="Transparent"
                     PointerPressed="OnItemPointerPressed"
+                    Tapped="OnItemTapped"
                     DoubleTapped="OnItemDoubleTapped"
                     ToolTip.Tip="{Binding ToolTip}"
                     ToolTip.Placement="Right">

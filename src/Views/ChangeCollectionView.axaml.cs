@@ -308,30 +308,19 @@ namespace SourceGit.Views
             }
         }
 
+        private void OnRowTapped(object sender, TappedEventArgs e)
+        {
+            if (sender is Control { DataContext: ViewModels.ChangeTreeNode { IsFolder: true } node } && TreeRowTap.IsPlainTap(e))
+                ToggleNodeIsExpanded(node);
+        }
+
         private void OnRowDoubleTapped(object sender, TappedEventArgs e)
         {
             if (sender is not Control { DataContext: { } ctx })
                 return;
 
-            if (ctx is ViewModels.ChangeTreeNode node)
-            {
-                if (node.IsFolder)
-                {
-                    var posX = e.GetPosition(this).X;
-                    if (posX < node.Depth * 16 + 16)
-                        return;
-
-                    ToggleNodeIsExpanded(node);
-                }
-                else
-                {
-                    RaiseEvent(new RoutedEventArgs(ChangeDoubleTappedEvent));
-                }
-            }
-            else if (ctx is Models.Change)
-            {
+            if (ctx is ViewModels.ChangeTreeNode { IsFolder: false } || ctx is Models.Change)
                 RaiseEvent(new RoutedEventArgs(ChangeDoubleTappedEvent));
-            }
         }
 
         private void OnRowSelectionChanged(object sender, SelectionChangedEventArgs _)

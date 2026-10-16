@@ -146,6 +146,7 @@
                   Height="24"
                   Background="Transparent"
                   ColumnDefinitions="18,*,Auto,Auto,Auto"
+                  Tapped="OnTappedBranchNode"
                   DoubleTapped="OnDoubleTappedBranchNode">
 
               <!-- Icon -->
