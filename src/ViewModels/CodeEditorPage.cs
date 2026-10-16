@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Avalonia.Collections;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace SourceGit.ViewModels
@@ -19,7 +21,12 @@ namespace SourceGit.ViewModels
             private set
             {
                 if (SetProperty(ref _currentPath, value))
+                {
                     OnPropertyChanged(nameof(HasFile));
+                    OnPropertyChanged(nameof(CanPreview));
+                    OnPropertyChanged(nameof(ShowEditor));
+                    OnPropertyChanged(nameof(CurrentDirectory));
+                }
             }
         }
 
@@ -30,6 +37,26 @@ namespace SourceGit.ViewModels
         }
 
         public bool HasFile => _currentPath != null;
+
+        public string CurrentDirectory => _currentPath == null ? string.Empty : Path.GetDirectoryName(_currentPath);
+
+        public bool CanPreview =>
+            OperatingSystem.IsWindows() &&
+            _currentPath != null &&
+            (_currentPath.EndsWith(".md", StringComparison.OrdinalIgnoreCase) ||
+             _currentPath.EndsWith(".markdown", StringComparison.OrdinalIgnoreCase));
+
+        public bool IsPreviewing
+        {
+            get => _isPreviewing;
+            set
+            {
+                if (SetProperty(ref _isPreviewing, value))
+                    OnPropertyChanged(nameof(ShowEditor));
+            }
+        }
+
+        public bool ShowEditor => HasFile && !_isPreviewing;
 
         public string Message
         {
@@ -71,6 +98,17 @@ namespace SourceGit.ViewModels
             await CheckExternalChangeAsync();
         }
 
+        public void Close()
+        {
+            _debounce?.Dispose();
+            _watcher?.Dispose();
+        }
+
+        public void ReportError(string message)
+        {
+            _repo.SendNotification(message, true);
+        }
+
         public async Task ActivateAsync(CodeEditorNode node)
         {
             if (node.IsFolder)
@@ -103,16 +141,62 @@ namespace SourceGit.ViewModels
             }
         }
 
+        /// <summary>
+        ///     文件被外部修改后：没有未保存改动就直接重新加载，有未保存改动则询问。
+        /// </summary>
         private async Task CheckExternalChangeAsync()
         {
-            if (_currentPath == null || !File.Exists(_currentPath))
+            if (_currentPath == null || _isCheckingExternalChange || !File.Exists(_currentPath))
                 return;
 
             if (File.GetLastWriteTimeUtc(_currentPath) == _loadedWriteTime)
                 return;
 
-            if (await App.AskConfirmAsync(App.Text("FileEditor.ReloadConfirm")))
-                await LoadFileAsync(_currentPath, _currentName);
+            _isCheckingExternalChange = true;
+            try
+            {
+                if (!_isDirty || await App.AskConfirmAsync(App.Text("FileEditor.ReloadConfirm")))
+                    await LoadFileAsync(_currentPath, _currentName);
+            }
+            finally
+            {
+                _isCheckingExternalChange = false;
+            }
+        }
+
+        private void WatchFile(string path)
+        {
+            _watcher?.Dispose();
+            _watcher = null;
+
+            if (path == null)
+                return;
+
+            try
+            {
+                var watcher = new FileSystemWatcher(Path.GetDirectoryName(path)!, Path.GetFileName(path))
+                {
+                    NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size | NotifyFilters.FileName,
+                };
+                watcher.Changed += OnWatchedFileChanged;
+                watcher.Created += OnWatchedFileChanged;
+                watcher.Renamed += OnWatchedFileChanged;
+                watcher.EnableRaisingEvents = true;
+                _watcher = watcher;
+            }
+            catch (Exception)
+            {
+                // 监听失败时，仍会在切回本页时检查外部改动
+            }
+        }
+
+        private void OnWatchedFileChanged(object sender, FileSystemEventArgs e)
+        {
+            // 一次保存常触发多个事件，合并后再处理
+            _debounce?.Dispose();
+            _debounce = new Timer(
+                _ => Dispatcher.UIThread.Post(async () => await CheckExternalChangeAsync()),
+                null, 300, Timeout.Infinite);
         }
 
         private async Task OpenFileAsync(CodeEditorNode node)
@@ -137,6 +221,10 @@ namespace SourceGit.ViewModels
             _encoding = result.Encoding;
             _loadedWriteTime = result.WriteTime;
             IsDirty = false;
+            if (!CanPreview)
+                IsPreviewing = false;
+
+            WatchFile(CurrentPath);
             LoadVersion++;
         }
 
@@ -323,6 +411,10 @@ namespace SourceGit.ViewModels
         private string _message = string.Empty;
         private bool _isDirty = false;
         private int _loadVersion = 0;
+        private bool _isPreviewing = false;
+        private bool _isCheckingExternalChange = false;
+        private FileSystemWatcher _watcher = null;
+        private Timer _debounce = null;
         private Encoding _encoding = new UTF8Encoding(false);
         private DateTime _loadedWriteTime = default;
     }

@@ -86,13 +86,23 @@
     <!-- Editor -->
     <Grid Grid.Column="2" RowDefinitions="28,*">
       <Border Grid.Row="0" BorderThickness="0,0,0,1" BorderBrush="{DynamicResource Brush.Border0}">
-        <Grid ColumnDefinitions="*,Auto" Margin="8,0,4,0">
+        <Grid ColumnDefinitions="*,Auto,Auto" Margin="8,0,4,0">
           <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
             <TextBlock Text="{Binding CurrentName}"/>
             <TextBlock Margin="6,0,0,0" Text="●" Foreground="DarkOrange" FontSize="10" VerticalAlignment="Center" IsVisible="{Binding IsDirty}"/>
           </StackPanel>
 
-          <Button Grid.Column="1"
+          <ToggleButton Grid.Column="1"
+                        Height="22" MinHeight="0" Padding="10,0" Margin="0,0,4,0"
+                        FontSize="11"
+                        VerticalAlignment="Center"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        IsVisible="{Binding CanPreview}"
+                        IsChecked="{Binding IsPreviewing, Mode=TwoWay}"
+                        Content="{DynamicResource Text.FileEditor.Preview}"/>
+
+          <Button Grid.Column="2"
                   Classes="icon_button"
                   Width="26" Height="26"
                   IsEnabled="{Binding IsDirty}"
@@ -105,11 +115,13 @@
 
       <Grid Grid.Row="1" Background="{DynamicResource Brush.Contents}">
         <v:CodeEditorTextView x:Name="Editor"
-                              IsVisible="{Binding HasFile}"
+                              IsVisible="{Binding ShowEditor}"
                               FontFamily="{DynamicResource Fonts.Monospace}"
                               FontSize="{Binding Source={x:Static vm:Preferences.Instance}, Path=EditorFontSize}"
                               TabWidth="{Binding Source={x:Static vm:Preferences.Instance}, Path=EditorTabWidth}"
                               Background="Transparent"/>
+
+        <Grid x:Name="PreviewHost" IsVisible="{Binding IsPreviewing}"/>
 
         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"
                    Foreground="{DynamicResource Brush.FG2}"

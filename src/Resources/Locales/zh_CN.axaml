@@ -157,6 +157,7 @@
   <x:String x:Key="Text.FileEditor.Binary" xml:space="preserve">这是二进制文件，请用外部编辑器打开。</x:String>
   <x:String x:Key="Text.FileEditor.DiscardConfirm" xml:space="preserve">当前文件有未保存的改动，是否放弃？</x:String>
   <x:String x:Key="Text.FileEditor.OverwriteConfirm" xml:space="preserve">文件已在编辑器之外被修改，仍要覆盖保存吗？</x:String>
+  <x:String x:Key="Text.FileEditor.Preview" xml:space="preserve">预览</x:String>
   <x:String x:Key="Text.FileEditor.ReadFailed" xml:space="preserve">读取文件失败。</x:String>
   <x:String x:Key="Text.FileEditor.ReloadConfirm" xml:space="preserve">文件已在编辑器之外被修改，是否重新加载？未保存的改动将丢失。</x:String>
   <x:String x:Key="Text.FileEditor.SelectFile" xml:space="preserve">选择一个文件开始编辑</x:String>

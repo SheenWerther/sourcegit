@@ -153,6 +153,7 @@
   <x:String x:Key="Text.FileEditor.Binary" xml:space="preserve">This is a binary file. Please open it with an external editor.</x:String>
   <x:String x:Key="Text.FileEditor.DiscardConfirm" xml:space="preserve">The current file has unsaved changes. Discard them?</x:String>
   <x:String x:Key="Text.FileEditor.OverwriteConfirm" xml:space="preserve">The file was modified outside the editor. Overwrite it anyway?</x:String>
+  <x:String x:Key="Text.FileEditor.Preview" xml:space="preserve">Preview</x:String>
   <x:String x:Key="Text.FileEditor.ReadFailed" xml:space="preserve">Failed to read this file.</x:String>
   <x:String x:Key="Text.FileEditor.ReloadConfirm" xml:space="preserve">The file was modified outside the editor. Reload it? Unsaved changes will be lost.</x:String>
   <x:String x:Key="Text.FileEditor.SelectFile" xml:space="preserve">Select a file to edit</x:String>

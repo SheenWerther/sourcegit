@@ -492,6 +492,7 @@ namespace SourceGit.ViewModels
                 _cancellationRefreshStashes.Cancel();
 
             _watcher?.Dispose();
+            _codeEditorPage?.Close();
             _autoFetchTimer.Dispose();
         }
 

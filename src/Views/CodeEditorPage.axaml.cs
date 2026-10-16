@@ -172,14 +172,35 @@ namespace SourceGit.Views
                 await _vm.SaveAsync(Editor.Text);
         }
 
-        private void OnViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private async void OnViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName != nameof(ViewModels.CodeEditorPage.LoadVersion) || _vm == null)
+            if (_vm == null)
                 return;
 
-            _loading = true;
-            Editor.SetContent(_vm.LoadedText, _vm.CurrentName);
-            _loading = false;
+            if (e.PropertyName == nameof(ViewModels.CodeEditorPage.LoadVersion))
+            {
+                _loading = true;
+                Editor.SetContent(_vm.LoadedText, _vm.CurrentName);
+                _loading = false;
+
+                if (_vm.IsPreviewing)
+                    await RefreshPreviewAsync();
+            }
+            else if (e.PropertyName == nameof(ViewModels.CodeEditorPage.IsPreviewing) && _vm.IsPreviewing)
+            {
+                await RefreshPreviewAsync();
+            }
+        }
+
+        private async System.Threading.Tasks.Task RefreshPreviewAsync()
+        {
+            if (_preview == null)
+            {
+                _preview = new MarkdownPreviewView() { ErrorReporter = _vm.ReportError };
+                PreviewHost.Children.Add(_preview);
+            }
+
+            await _preview.ShowAsync(Editor.Text, _vm.CurrentDirectory);
         }
 
         private void OnEditorTextChanged(object sender, EventArgs e)
@@ -190,6 +211,7 @@ namespace SourceGit.Views
 
         private ViewModels.CodeEditorPage _vm = null;
         private Control _host = null;
+        private MarkdownPreviewView _preview = null;
         private bool _loading = false;
     }
 }
