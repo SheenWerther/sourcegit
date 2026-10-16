@@ -9,7 +9,7 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SourceGit.Views.ImageDiffView"
              x:DataType="m:ImageDiff">
-  <TabControl SelectedIndex="{Binding Source={x:Static vm:Preferences.Instance}, Path=ImageDiffActiveIdx, Mode=TwoWay}" Margin="0,0,0,8" TabStripPlacement="Bottom">
+  <TabControl x:Name="Tabs" SelectedIndex="{Binding Source={x:Static vm:Preferences.Instance}, Path=ImageDiffActiveIdx, Mode=TwoWay}" Margin="0,0,0,8" TabStripPlacement="Bottom">
     <TabControl.Styles>
       <Style Selector="TabControl /template/ ItemsPresenter#PART_ItemsPresenter > WrapPanel">
         <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -216,6 +216,22 @@
           </StackPanel>
         </Grid>
       </Grid>
+    </TabItem>
+
+    <TabItem IsVisible="{Binding Old, Converter={x:Static ObjectConverters.IsNotNull}}">
+      <TabItem.Header>
+        <TextBlock Text="{DynamicResource Text.Diff.Old}" FontSize="11"/>
+      </TabItem.Header>
+
+      <v:ZoomableImageView Image="{Binding Old}" Margin="8,16,8,0"/>
+    </TabItem>
+
+    <TabItem IsVisible="{Binding New, Converter={x:Static ObjectConverters.IsNotNull}}">
+      <TabItem.Header>
+        <TextBlock Text="{DynamicResource Text.Diff.New}" FontSize="11"/>
+      </TabItem.Header>
+
+      <v:ZoomableImageView Image="{Binding New}" Margin="8,16,8,0"/>
     </TabItem>
 
   </TabControl>
